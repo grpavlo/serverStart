@@ -12,6 +12,15 @@ router.post('/signIn', (req, res) => {
             res.status(500).send(error);
         })
 })
+router.get('/test', (req, res) => {
+    controller_clients.test(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
 
 router.post('/testToken', (req, res) => {
     controller_clients.testToken(req.body)
@@ -1109,6 +1118,81 @@ router.post('/newClients', (req, res) => {
 
 router.get('/getClients', (req, res) => {
     controller_clients.getClients(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+
+router.post('/uploadServicePhoto', (req, res) => {
+    controller_clients.uploadServicePhoto(req)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+
+router.post('/newServiceNewTwo', (req, res) => {
+    controller_clients.newServiceNewTwo(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+
+router.get('/getServiceNewTwo', (req, res) => {
+    controller_clients.getServiceNewTwo(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+router.post('/deleteServiceNewTwo', (req, res) => {
+    controller_clients.deleteServiceNewTwo(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+router.post('/doneServiceNewTwo', (req, res) => {
+    controller_clients.doneServiceNewTwo(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+router.post('/updateServiceNewTwo', (req, res) => {
+    controller_clients.updateServiceNewTwo(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+router.post('/updateServiceNewTwoNoPhoto', (req, res) => {
+    controller_clients.updateServiceNewTwoNoPhoto(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+router.post('/postServiceNewTwo', (req, res) => {
+    controller_clients.postServiceNewTwo(req.body)
         .then(response => {
             res.status(200).send(response);
         })

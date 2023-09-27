@@ -372,6 +372,24 @@ create TABLE serviceNew(
     activated boolean
 );
 
+// + data 11
+create TABLE serviceNewTwo(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(10000),
+    subtitle VARCHAR(10000),
+    maintext VARCHAR(10000000),
+    title1 VARCHAR(10000000),
+    maintextG  VARCHAR(10000000),
+    pointstitle VARCHAR(10000000),
+    text VARCHAR(10000000),
+    text1 VARCHAR(10000000),
+    text2 VARCHAR(10000000),
+    text3 VARCHAR(10000000),
+    photoname VARCHAR(10000000),
+    tobeornottobe boolean,
+    url VARCHAR(255),
+    activated boolean
+);
 
 let namePhotoArticles
 const randomNumber = generateRandomNumber(100, 10000);

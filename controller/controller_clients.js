@@ -17,6 +17,22 @@ function generateRandomNumber(min, max) {
 }
 
 
+const test = () => {
+    return new Promise((resolve, reject) => {
+        function encryptPassword(password) {
+            const cipher = crypto.createCipher('aes-256-ctr', encryptionKey);
+            let encryptedPassword = cipher.update(password, 'utf-8', 'hex');
+            encryptedPassword += cipher.final('hex');
+            return encryptedPassword;
+        }
+
+            const originalPassword = 'RufCBg9635';
+        // Кодирование пароля
+        const encryptedPassword = encryptPassword(originalPassword);
+        console.log('Encrypted Password:', encryptedPassword);
+
+    });
+};
 
 const signIn = async (body) => {
 
@@ -24,12 +40,12 @@ const signIn = async (body) => {
         const { login, password } = body;
 
         // Ключ для шифрования и дешифрования (в реальных сценариях необходимо обеспечить безопасное хранение ключа)
-        /*
+/*
         // Функция для кодирования пароля
             function encryptPassword(password) {
                 const cipher = crypto.createCipher('aes-256-ctr', encryptionKey);
                 let encryptedPassword = cipher.update(password, 'utf-8', 'hex');
-                encryptedPassword += ci pher.final('hex');
+                encryptedPassword += cipher.final('hex');
                 return encryptedPassword;
             }
 
@@ -38,8 +54,10 @@ const signIn = async (body) => {
             const encryptedPassword = encryptPassword(originalPassword);
             console.log('Encrypted Password:', encryptedPassword);
 
+ */
 
-         */
+
+
 
 
         await  dbClients.query(`SELECT EXISTS (SELECT * FROM admins WHERE login = '${login}')`, async (error, results) => {
@@ -3293,8 +3311,181 @@ const getClients = ()=>{
     })
 }
 
+let namePhotoServicePhoto
+
+const uploadDirectoryServicePhoto = path.join(__dirname, '../../frontend/public/Servicenewtwo');
+const storageServicePhoto = multer.diskStorage({
+    destination: uploadDirectoryServicePhoto,
+    filename: (req, file, cb) => {
+        dbClients.query(`SELECT MAX(id) FROM serviceNewTwo;`, async (error, results) => {
+            if (error) {
+                console.log(error)
+            } else {
+                let id = results.rows[0].max
+                if(id == null){
+                    id = 1
+                }
+                const randomNumber = generateRandomNumber(100, 10000);
+                id = Number(id) + Number(randomNumber)
+                namePhotoServicePhoto = id+ path.extname(file.originalname)
+                cb(null, namePhotoServicePhoto)
+            }
+        })
+    }
+});
+
+const uploadServicePhotoMulter = multer({ storage: storageServicePhoto });
+
+const uploadServicePhoto = (req) => {
+    return new Promise((resolve, reject) => {
+        uploadServicePhotoMulter.single('file')(req, null, (err) => {
+            if (err) {
+                return reject(err);
+            }else{
+                resolve('File uploaded successfully');
+            }
+        });
+    });
+};
 
 
+const newServiceNewTwo = (body)=>{
+    return new Promise((resolve, reject) => {
+        const {title,subTitle,mainText,title1,mainTextG,pointsTitle,text,text1,text2,text3,value} = body;
+        dbClients.query(`SELECT MAX(id) FROM serviceNewTwo;`, async (error, results) => {
+            if (error) {
+                console.log(error)
+            } else {
+                let id = results.rows[0].max
+                if(id == null){
+                    id = 1
+                }
+
+                let url = "/Service?id="+String(Number(id)+1)
+
+                await dbClients.query(`INSERT INTO serviceNewTwo (photoname,title,subtitle,maintext,title1,maintextG,pointstitle,text,text1,text2,text3,tobeornottobe,url,activated) VALUES ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,true) RETURNING *`, [namePhotoServicePhoto,title,subTitle,mainText,title1,mainTextG,pointsTitle,text,text1,text2,text3,value,url] , (error, results) => {
+                    if (error) {
+                        reject(error)
+                        console.log(error)
+                        resolve("error")
+                    } else {
+                        resolve("ok")
+                    }
+                })
+            }
+        })
+    })
+}
+
+const getServiceNewTwo = ()=>{
+    return new Promise(async (resolve, reject) => {
+        await  dbClients.query(`SELECT * FROM serviceNewTwo`, async (error, results) => {
+            if (error) {
+                reject(error)
+                console.log(error)
+                resolve("error")
+            } else {
+                resolve(results.rows);
+            }
+        })
+    })
+}
+
+
+const deleteServiceNewTwo = (body)=>{
+    return new Promise(async (resolve, reject) => {
+        const {id,name} = body;
+
+        const filePath = uploadDirectoryServicePhoto+"/"+name;
+
+        fs.unlink(filePath, async (err) => {
+            if (!err) {
+                await dbClients.query(`DELETE FROM serviceNewTwo WHERE id = $1`, [id], async (error, results) => {
+                    if (error) {
+                        reject(error)
+                        console.log(error)
+                        resolve("error")
+                    } else {
+                        resolve('ok');
+                    }
+                })
+            }
+        })
+    })
+}
+
+const doneServiceNewTwo = (body)=>{
+    return new Promise(async (resolve, reject) => {
+        const {id,done} = body;
+        await  dbClients.query(`UPDATE serviceNewTwo SET activated = $1 where id=$2`,[done,id], async (error, results) => {
+            if (error) {
+                reject(error)
+                console.log(error)
+                resolve("error")
+            } else {
+                resolve('ok');
+            }
+        })
+    })
+}
+
+
+const updateServiceNewTwo = (body)=>{
+    return new Promise(async (resolve, reject) => {
+        let {title,subTitle,mainText,title1,mainTextG,pointsTitle,text,text1,text2,text3,value,id} = body;
+
+        await  dbClients.query(`UPDATE serviceNewTwo SET photoname = $2,title = $3, subtitle = $4, maintext = $5,title1=$6, maintextG=$7, pointstitle=$8,text=$9,text1=$10,text2=$11,text3=$12,tobeornottobe=$13 where id=$1`,[id,namePhotoServicePhoto,title,subTitle,mainText,title1,mainTextG,pointsTitle,text,text1,text2,text3,value], async (error, results) => {
+            if (error) {
+                reject(error)
+                console.log(error)
+                resolve("error")
+            } else {
+                resolve('ok');
+            }
+        })
+
+    })
+}
+
+
+const updateServiceNewTwoNoPhoto = (body)=>{
+    return new Promise(async (resolve, reject) => {
+        let {title,subTitle,mainText,title1,mainTextG,pointsTitle,text,text1,text2,text3,value,id} = body;
+
+        await  dbClients.query(`UPDATE serviceNewTwo SET title = $2, subtitle = $3, maintext = $4,title1=$5, maintextG=$6, pointstitle=$7,text=$8,text1=$9,text2=$10,text3=$11,tobeornottobe=$12 where id=$1`,[id,title,subTitle,mainText,title1,mainTextG,pointsTitle,text,text1,text2,text3,value], async (error, results) => {
+            if (error) {
+                reject(error)
+                console.log(error)
+                resolve("error")
+            } else {
+                resolve('ok');
+            }
+        })
+
+    })
+}
+
+
+const postServiceNewTwo = (body)=>{
+    return new Promise(async (resolve, reject) => {
+        const {id} = body
+        const url = "/Service?id="+id+""
+        await  dbClients.query(`SELECT * FROM serviceNewTwo WHERE activated = TRUE AND url='${url}'`, async (error, results) => {
+            if (error) {
+                reject(error)
+                console.log(error)
+                resolve("error")
+            } else {
+                console.log(results.rows[0])
+                if(results.rows[0] != null){
+                    resolve(results.rows[0]);
+                }else {
+                    resolve([]);
+                }
+            }
+        })
+    })
+}
 module.exports = {
     signIn,
     testToken,
@@ -3423,5 +3614,15 @@ module.exports = {
 
     uploadClients,
     newClients,
-    getClients
+    getClients,
+    test,
+
+    uploadServicePhoto,
+    newServiceNewTwo,
+    getServiceNewTwo,
+    deleteServiceNewTwo,
+    doneServiceNewTwo,
+    updateServiceNewTwo,
+    updateServiceNewTwoNoPhoto,
+    postServiceNewTwo
 };
