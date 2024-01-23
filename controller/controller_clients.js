@@ -10,7 +10,7 @@ const {rows} = require("pg/lib/defaults");
 
 const encryptionKey = 'myencryptionkey';
 
-const emailAdminStart = "paha__gr@ukr.net"
+const emailAdminStart = "t.pirog@start-in.com.ua"
 
 function generateRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -2956,7 +2956,7 @@ const uploadCollective = (req) => {
 
 const newCollective = (body)=>{
     return new Promise(async (resolve, reject) => {
-        const {title,titlePoint,point1,point2,point3,namePhoto0,textBlock2,titleBlock3,namePhoto1,pib1,position1,text1,namePhoto2,pib2,position2,text2,namePhoto3,pib3,position3,text3,namePhoto4,pib4,position4,text4,titleBlock5,namePhoto5,pib5,position5,text5,namePhoto6,pib6,position6,text6,titleBlock6,namePhoto7,pib7,position7,text7,namePhoto8,pib8,position8,text8,titleBlock4} = body;
+        const {title,titlePoint,point1,point2,point3,namePhoto0,textBlock2,titleBlock3,namePhoto1,pib1,position1,text1,namePhoto2,pib2,position2,text2,namePhoto3,pib3,position3,text3,namePhoto4,pib4,position4,text4,titleBlock5,namePhoto5,pib5,position5,text5,namePhoto6,pib6,position6,text6,titleBlock6,namePhoto7,pib7,position7,text7,namePhoto8,pib8,position8,text8,titleBlock4,namePhoto9,pib9,position9,text9,namePhoto10,pib10,position10,text10,titleBlock7} = body;
 
         await  dbClients.query(`SELECT * FROM collective`, async (error, results) => {
             if (error) {
@@ -2966,9 +2966,10 @@ const newCollective = (body)=>{
             } else {
                 resolve(results.rows);
                 if(results.rows.length === 0){
-                    await dbClients.query(`INSERT INTO collective (titlePoint,point1,point2,point3,namePhoto,textBlock2,titleBlock3,namePhoto1,pib1,position1,text1,namePhoto2,pib2,position2,text2,namePhoto3,pib3,position3,text3,namePhoto4,pib4,position4,text4,titleBlock5,namePhoto5,pib5,position5,text5,namePhoto6,pib6,position6,text6,titleBlock6,namePhoto7,pib7,position7,text7,namePhoto8,pib8,position8,text8,titleBlock4,title) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-                                                                                                                                                                                                                                                                                                                                                                                                                                   $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39,
-                                                                                                                                                                                                                                                                                                                                                                                                                                   $40, $41, $42,$43) RETURNING *`, [titlePoint,point1,point2,point3,"0" + path.extname(namePhoto0),textBlock2,titleBlock3,"1" + path.extname(namePhoto1),pib1,position1,text1,"2" + path.extname(namePhoto2),pib2,position2,text2,"3" + path.extname(namePhoto3),pib3,position3,text3,"4" + path.extname(namePhoto4),pib4,position4,text4,titleBlock5,"5" + path.extname(namePhoto5),pib5,position5,text5,"6" + path.extname(namePhoto6),pib6,position6,text6,titleBlock6,"7" + path.extname(namePhoto7),pib7,position7,text7,"8" + path.extname(namePhoto8),pib8,position8,text8,titleBlock4,title] , (error, results) => {
+//потрібно дописати під новий titleBlock6 +++
+                    await dbClients.query(`INSERT INTO collective (titlePoint,point1,point2,point3,namePhoto,textBlock2,titleBlock3,namePhoto1,pib1,position1,text1,namePhoto2,pib2,position2,text2,namePhoto3,pib3,position3,text3,namePhoto4,pib4,position4,text4,titleBlock5,namePhoto5,pib5,position5,text5,namePhoto6,pib6,position6,text6,titleBlock6,namePhoto7,pib7,position7,text7,namePhoto8,pib8,position8,text8,titleBlock4,title,namePhoto9,pib9,position9,text9) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,21,22,23,24
+                                                                                                                                                                                                                                                                                                                                                                                                                                   , $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39,
+                                                                                                                                                                                                                                                                                                                                                                                                                                   $40, $41, $42,$43,$44,$45,$46,$47) RETURNING *`, [titlePoint,point1,point2,point3,"0" + path.extname(namePhoto0),textBlock2,titleBlock3,"1" + path.extname(namePhoto1),pib1,position1,text1,"2" + path.extname(namePhoto2),pib2,position2,text2,"3" + path.extname(namePhoto3),pib3,position3,text3,"4" + path.extname(namePhoto4),pib4,position4,text4,titleBlock5,"5" + path.extname(namePhoto5),pib5,position5,text5,"6" + path.extname(namePhoto6),pib6,position6,text6,titleBlock6,"7" + path.extname(namePhoto7),pib7,position7,text7,"8" + path.extname(namePhoto8),pib8,position8,text8,titleBlock4,title,"9" + path.extname(namePhoto9),pib9,position9,text9] , (error, results) => {
                         if (error) {
                             reject(error)
                             console.log(error)
@@ -3023,7 +3024,16 @@ const newCollective = (body)=>{
                              position8 = $40,
                              text8 = $41,
                              titleBlock4 = $43,
-                             title = $44
+                             title = $44,
+                             namePhoto9 = $45,
+                             pib9 = $46,
+                             position9 = $47,
+                             text9 = $48,
+                             namePhoto10 = $49,
+                             pib10 = $50,
+                             position10 = $51,
+                             text10 = $52,
+			     titleBlock7 = $53
                          WHERE id = $42
                              RETURNING *`,
                         [
@@ -3032,7 +3042,9 @@ const newCollective = (body)=>{
                             "3" + path.extname(namePhoto3), pib3, position3, text3, "4" + path.extname(namePhoto4), pib4, position4, text4,titleBlock5,
                             "5" + path.extname(namePhoto5), pib5, position5, text5, "6" + path.extname(namePhoto6), pib6,
                             position6, text6, titleBlock6, "7" + path.extname(namePhoto7), pib7, position7, text7,
-                            "8" + path.extname(namePhoto8), pib8, position8, text8, results.rows[0].id,titleBlock4,title
+                            "8" + path.extname(namePhoto8), pib8, position8, text8, results.rows[0].id,titleBlock4,title,
+			    "9" + path.extname(namePhoto9), pib9, position9, text9, 
+			    "10" + path.extname(namePhoto10), pib10, position10, text10,titleBlock7
                         ],
                         (error, results) => {
                             if (error) {
